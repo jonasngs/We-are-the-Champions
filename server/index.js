@@ -47,3 +47,113 @@ app.post('/registration', async (req, res) => {
     }
   }
 });
+
+// Add match results
+app.put('/results', async (req, res) => {
+  try {
+    const { matchResults } = req.body;
+    const resultList = matchResults.trim().split('\n');
+    const params = [];
+
+    const teamInfo = (
+      await pool.query(
+        'SELECT team_name, group_no, goals_no, score, alt_score, played_teams FROM teams_tab'
+      )
+    ).rows;
+
+    var data = {};
+    teamInfo.forEach(function (team) {
+      data[team.team_name] = {
+        groupNo: team.group_no,
+        goalsNo: team.goals_no,
+        score: team.score,
+        altScore: team.alt_score,
+        playedTeams: team.played_teams,
+      };
+    });
+
+    resultList.forEach(function (result) {
+      result = result.trim();
+      const regexPattern = /^[^-\s]\w+\s\w+\s\d+\s\d+/;
+      if (!regexPattern.test(result)) {
+        throw new Error('Incorrect format');
+      }
+      const [firstTeamName, secondTeamName, firstTeamGoals, secondTeamGoals] =
+        result.split(' ');
+
+      const intFirstTeamGoals = parseInt(firstTeamGoals);
+      const intSecondTeamGoals = parseInt(secondTeamGoals);
+
+      // Update played teams
+      var firstPlayedTeams = data[firstTeamName].playedTeams
+        .split(',')
+        .map((e) => e.trim())
+        .filter(Boolean);
+      var secondPlayedTeams = data[secondTeamName].playedTeams
+        .split(',')
+        .map((e) => e.trim())
+        .filter(Boolean);
+
+      if (firstPlayedTeams.includes(secondTeamName)) {
+        throw new Error(
+          `Duplicate match result: ${firstTeamName} ${secondTeamName}`
+        );
+      } else if (data[firstTeamName].groupNo != data[secondTeamName].groupNo) {
+        throw new Error(
+          `Not in same group: ${firstTeamName} ${secondTeamName}`
+        );
+      } else {
+        // Update played teams in data object
+        firstPlayedTeams.push(secondTeamName);
+        secondPlayedTeams.push(firstTeamName);
+        var firstTeamPlayedTeams = firstPlayedTeams.join(',');
+        var secondTeamPlayedTeams = secondPlayedTeams.join(',');
+        data[firstTeamName].playedTeams = firstTeamPlayedTeams;
+        data[secondTeamName].playedTeams = secondTeamPlayedTeams;
+
+        //Update score, alt score
+        if (intFirstTeamGoals > intSecondTeamGoals) {
+          // First team wins
+          data[firstTeamName].score += 3;
+          data[firstTeamName].altScore += 5;
+          data[secondTeamName].altScore += 1;
+        } else if (intSecondTeamGoals > intFirstTeamGoals) {
+          // Second team wins
+          data[secondTeamName].score += 3;
+          data[secondTeamName].altScore += 5;
+          data[firstTeamName].altScore += 1;
+        } else {
+          // Draw
+          data[firstTeamName].score += 1;
+          data[firstTeamName].altScore += 3;
+          data[secondTeamName].score += 1;
+          data[secondTeamName].altScore += 3;
+        }
+
+        // Update goals
+        data[firstTeamName].goalsNo += intFirstTeamGoals;
+        data[secondTeamName].goalsNo += intSecondTeamGoals;
+      }
+    });
+
+    for (let team in data) {
+      params.push([
+        team,
+        data[team].goalsNo,
+        data[team].score,
+        data[team].altScore,
+        data[team].playedTeams,
+      ]);
+    }
+
+    let query = format(
+      'UPDATE teams_tab as t SET goals_no = c.goals_no::SMALLINT, score = c.score::SMALLINT, alt_score = c.alt_score::SMALLINT, played_teams = c.played_teams FROM (VALUES %L) AS c(team_name, goals_no, score, alt_score, played_teams) WHERE c.team_name = t.team_name RETURNING *',
+      params
+    );
+    const newResults = await pool.query(query);
+    res.json(newResults.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
+});
