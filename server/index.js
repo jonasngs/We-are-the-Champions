@@ -157,3 +157,13 @@ app.put('/results', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+// Clear all data
+app.delete('/clear', async (req, res) => {
+  try {
+    const clearData = await pool.query('DELETE FROM teams_tab');
+    res.json('All data cleared');
+  } catch (err) {
+    console.error(err.message);
+  }
+});
