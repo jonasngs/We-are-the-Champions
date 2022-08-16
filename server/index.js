@@ -167,3 +167,55 @@ app.delete('/clear', async (req, res) => {
     console.error(err.message);
   }
 });
+
+// Get rankings
+app.get('/ranking', async (req, res) => {
+  try {
+    const ranking = (
+      await pool.query(
+        'SELECT * FROM teams_tab ORDER BY group_no ASC, score DESC, goals_no DESC, alt_score DESC, registration_date ASC'
+      )
+    ).rows;
+    // res.json(ranking)
+    const firstGroup = [];
+    const secondGroup = [];
+    ranking.forEach(function (team) {
+      let d = new Date(team.registration_date * 1000);
+      let month = (d.getMonth() + 1).toString();
+      let day = d.getDate().toString();
+      if (day.length < 2) {
+        day = '0' + day;
+      }
+      if (month.length < 2) {
+        month = '0' + month;
+      }
+      let date = [day, month].join('/');
+      if (team.group_no == 1) {
+        firstGroup.push({
+          teamName: team.team_name,
+          registrationDate: date,
+          goalsNo: team.goals_no,
+          score: team.score,
+          altScore: team.alt_score,
+        });
+      } else {
+        secondGroup.push({
+          teamName: team.team_name,
+          registrationDate: date,
+          goalsNo: team.goals_no,
+          score: team.score,
+          altScore: team.alt_score,
+        });
+      }
+    });
+    // // const g = { firstGroup: firstGroup, secondGroup: secondGroup };
+    // // res.json(g['firstGroup'][0])
+    res.json({ 1: firstGroup, 2: secondGroup });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.listen(5000, () => {
+  console.log('server has started on port 5000');
+});
