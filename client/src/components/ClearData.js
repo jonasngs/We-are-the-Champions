@@ -10,7 +10,7 @@ const ClearData = () => {
 
   return (
     <Fragment>
-      <div className="mt-5 text-right">
+      <div className="mt-5 mb-5 text-right">
         <button className="btn btn-danger" onClick={() => deleteAll()}>
           Clear all data
         </button>

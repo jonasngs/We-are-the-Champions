@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 const RankingTable = ({ groupNo, data }) => {
   return (
     <Fragment>
-      <h4 className="mt-5 text-center">Group {groupNo} team ranking</h4>
+      <h4 className="mt-5 text-center">Group {groupNo} Team Ranking</h4>
       <table className="table  text-center">
         <thead>
           <tr>

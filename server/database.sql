@@ -8,5 +8,5 @@ CREATE TABLE teams_tab(
     goals_no SMALLINT DEFAULT 0,
     score SMALLINT DEFAULT 0,
     alt_score SMALLINT DEFAULT 0,
-    played_teams VARCHAR(100) DEFAULT ''
+    played_teams VARCHAR(520) DEFAULT ''
 );
