@@ -16,7 +16,8 @@ const RankingTable = ({ groupNo, data }) => {
           </tr>
         </thead>
         <tbody>
-          {data[groupNo]?.map((rank) => (
+          {Array.isArray(data[groupNo]) ? 
+          data[groupNo]?.map((rank) => (
             <tr>
               <td>{rank.teamName}</td>
               <td>{rank.registrationDate}</td>
@@ -25,7 +26,7 @@ const RankingTable = ({ groupNo, data }) => {
               <td>{rank.altScore}</td>
               <td>{rank.qualified ? "Yes" : "No"}</td>
             </tr>
-          ))}
+          )): ""}
         </tbody>
       </table>
     </Fragment>

@@ -2,6 +2,10 @@
 
 Built using ReactJs, NodeJs, Express and PostgreSQL
 
+This application has been deployed to heroku and can be accessed at: `https://we-are-the-champions-tap.herokuapp.com/`
+
+To run the application locally:
+
 Requires the latest versions of npm, node and postgresql
 
 To run the application:
@@ -23,3 +27,5 @@ To run the application:
 8. Enter `http://localhost:3000` on your browser to access the URL shortener
 
 <br>
+
+User instructions 
