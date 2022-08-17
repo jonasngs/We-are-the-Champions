@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const path = require('path');
 const { registerTeams, addResults, getRanking, clearData } = require("./controller/teamHandlers")
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -27,6 +29,6 @@ app.delete('/clear', clearData);
 // Get rankings
 app.get('/ranking', getRanking);
 
-app.listen(5000, () => {
-  console.log('server has started on port 5000');
+app.listen(PORT, () => {
+  console.log(`server has started on port ${PORT}`);
 });

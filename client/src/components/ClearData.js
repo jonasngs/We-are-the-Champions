@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const ClearData = () => {
   const deleteAll = async () => {
-    axios.delete('http://localhost:5000/clear').then(function () {
+    axios.delete('/clear').then(function () {
       window.location = '/';
     });
   };

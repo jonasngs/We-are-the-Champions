@@ -8,7 +8,7 @@ const NewRegistration = () => {
   const onSubmitForm = async (e) => {
     e.preventDefault();
     axios
-      .post('http://localhost:5000/registration', {
+      .post('/registration', {
         teamInfo: teamInfo,
       })
       .then(function (res) {

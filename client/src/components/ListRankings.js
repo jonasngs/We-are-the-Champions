@@ -8,7 +8,7 @@ const ListRankings = () => {
 
   const getTeamRank = async () => {
     axios
-      .get('http://localhost:5000/ranking')
+      .get('/ranking')
       .then(function (res) {
         setRank(res.data);
       })

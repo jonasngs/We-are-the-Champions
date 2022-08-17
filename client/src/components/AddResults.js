@@ -8,7 +8,7 @@ const AddResults = () => {
   const onSubmitForm = async (e) => {
     e.preventDefault();
     axios
-      .put('http://localhost:5000/results', {
+      .put('/results', {
         matchResults: matchResults,
       })
       .then(function (res) {
