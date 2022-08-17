@@ -10,6 +10,14 @@ const { registerTeams, addResults, getRanking, clearData } = require("./controll
 app.use(cors());
 app.use(express.json());
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client/build")));
+
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+}
+
 // Register team
 app.post('/registration', registerTeams);
 
