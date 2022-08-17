@@ -202,6 +202,10 @@ async function getRanking(req, res) {
 
     const firstGroup = [];
     const secondGroup = [];
+
+    var firstGroupQualified = 0;
+    var secondGroupQualified = 0;
+
     ranking.forEach(function (team) {
       let d = new Date(team.registration_date * 1000);
       let month = (d.getMonth() + 1).toString();
@@ -213,21 +217,28 @@ async function getRanking(req, res) {
         month = '0' + month;
       }
       let date = [day, month].join('/');
+
       if (team.group_no == 1) {
+        firstGroupQualified++;
+        const qualified = firstGroupQualified < 5 ? true : false
         firstGroup.push({
           teamName: team.team_name,
           registrationDate: date,
           goalsNo: team.goals_no,
           score: team.score,
-          altScore: team.alt_score
+          altScore: team.alt_score,
+          qualified: qualified
         });
       } else {
+        secondGroupQualified++;
+        const qualified = secondGroupQualified < 5 ? true : false
         secondGroup.push({
           teamName: team.team_name,
           registrationDate: date,
           goalsNo: team.goals_no,
           score: team.score,
-          altScore: team.alt_score
+          altScore: team.alt_score,
+          qualified: qualified
         });
       }
     });
