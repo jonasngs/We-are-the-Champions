@@ -16,6 +16,7 @@ const RankingTable = ({ groupNo, data }) => {
           </tr>
         </thead>
         <tbody>
+          {console.log(data)}
           {Array.isArray(data[groupNo]) ? 
           data[groupNo]?.map((rank) => (
             <tr>
