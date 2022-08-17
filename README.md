@@ -24,8 +24,44 @@ To run the application:
 
 7. In another terminal, in the root directory, run `node index` to start the server instance
 
-8. Enter `http://localhost:3000` on your browser to access the URL shortener
+8. Enter `http://localhost:3000` on your browser to access the We are the champions application
 
 <br>
 
-User instructions 
+User instructions:
+
+When registering teams, please follow the following format:
+
+{Team A Name} {Team A registration date in DD/MM} {Team A group number}
+{Team B name} {Team B registration date in DD/MM} {Team B group number}
+{Team C name} {Team C registration date in DD/MM} {Team C group number}
+
+***Example:***
+
+firstTeam 17/05 2
+
+secondTeam 07/02 2
+
+thirdTeam 24/04 1
+
+fourthTeam 24/01 1
+
+
+<br>
+
+When adding match results, please follow the following format:
+
+{Team A name} {Team B name} {Team A goals scored} {Team B goals scored}
+{Team B name} {Team C name} {Team B goals scored} {Team C goals scored}
+{Team C name} {Team D name} {Team C goals scored} {Team D goals scored}
+
+***Example:***
+
+firstTeam secondTeam 0 3
+
+thirdTeam fourthTeam 1 1
+
+
+<br>
+
+***Take note*** that extra whitespaces between data in each row will be considered as an incorrect format.

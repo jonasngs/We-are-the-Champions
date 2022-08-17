@@ -18,7 +18,6 @@ const NewRegistration = () => {
       .catch(function (err) {
         console.error(err.response.data.error);
         setError(err.response.data.error);
-        // setTeamInfo('');
       });
   };
 

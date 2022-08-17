@@ -4,7 +4,6 @@ import RankingTable from './RankingTable';
 
 const ListRankings = () => {
   const [ranking, setRank] = useState([]);
-  const [isEmpty, setIsEmpty] = useState(true);
 
   const getTeamRank = async () => {
     axios
