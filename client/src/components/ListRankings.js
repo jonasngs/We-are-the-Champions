@@ -10,6 +10,7 @@ const ListRankings = () => {
     axios
       .get('/ranking')
       .then(function (res) {
+        console.log(res)
         setRank(res.data);
       })
       .catch(function (err) {
